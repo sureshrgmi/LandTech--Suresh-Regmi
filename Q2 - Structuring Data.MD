@@ -30,11 +30,10 @@ CREATE TABLE IF NOT EXISTS dim_contracts_raw
 
 ```	
 ALTER TABLE dim_contracts_raw
-ADD COLUMN new_type VARCHAR(16);
+ADD COLUMN new_type VARCHAR(25);
 ```
 
-2. Now, update the field with a new type based on the logic 
-
+3. Now, update the field with a new type based on the logic 
 ● Any customer who did not previously have a contract is ‘New Business’
 ● Any customer who starts a new contract within 90 days of their last contract ending is
 considered to have renewed (called ‘Renewal 90d Grace’)
@@ -42,6 +41,30 @@ considered to have renewed (called ‘Renewal 90d Grace’)
 considered to have re-engaged
 ● Any customer who already has a contract that is active at the time they start a new one,
 is considered to have expanded mid-cycle (called ‘Mid-Cycle Expansion’)
+
+```
+
+UPDATE dim_contracts_raw
+SET new_type = (
+    CASE
+        WHEN NOT EXISTS (
+            SELECT 1
+            FROM dim_contracts_raw
+            WHERE account_id = dim_contracts_raw.account_id
+            AND end_date > dim_contracts_raw.start_date
+        )
+        THEN 'New Business'
+        WHEN end_date <= (closed_date + INTERVAL '90 days')
+        THEN 'Renewal 90d Grace'
+        WHEN end_date > (closed_date + INTERVAL '90 days')
+        THEN 'Re-Engagement'
+        ELSE 'Mid-Cycle Expansion'
+    END
+);
+
+```
+
+
 
 ```
 CREATE TABLE date_dim (
