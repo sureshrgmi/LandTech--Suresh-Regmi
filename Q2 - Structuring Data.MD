@@ -34,11 +34,15 @@ ADD COLUMN new_type VARCHAR(25);
 ```
 
 3. Now, update the field with a new type based on the logic 
+
 ● Any customer who did not previously have a contract is ‘New Business’
+
 ● Any customer who starts a new contract within 90 days of their last contract ending is
 considered to have renewed (called ‘Renewal 90d Grace’)
+
 ● Any customer who starts a new contract after 90 days of their last contract ending is
 considered to have re-engaged
+
 ● Any customer who already has a contract that is active at the time they start a new one,
 is considered to have expanded mid-cycle (called ‘Mid-Cycle Expansion’)
 
