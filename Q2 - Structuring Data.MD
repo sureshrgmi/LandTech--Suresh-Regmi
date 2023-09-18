@@ -112,7 +112,7 @@ CREATE TABLE IF NOT EXISTS contracts_fact
 );
 ```
 
-Inserting data into the date dimension table
+4. Inserting data into the date dimension table
 
 ```
 INSERT INTO date_dim (date_col, year, quarter, month, weekday, is_weekend)
@@ -130,6 +130,8 @@ FROM (
 
 
 ```
+5. Loading data into other dimension tables from the dim_contracts_raw table
 
 
-Creating the table for 
+
+6. Loading data into the fact table from the raw data table
