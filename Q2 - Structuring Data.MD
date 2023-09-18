@@ -57,10 +57,7 @@ SET new_type = (
 
 ```
 
-4. The next step is to design our fact and dimension tables
-
-
-
+4. The next step is to design our fact and dimension tables (Based on Tables_Design.jpg)
 
 ```
 CREATE TABLE date_dim (
@@ -72,6 +69,47 @@ CREATE TABLE date_dim (
   is_weekend BOOLEAN NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS account_dim
+(
+    account_id character varying(25) NOT NULL,
+    account_name character varying(100) ,
+    CONSTRAINT account_dim_pkey PRIMARY KEY (account_id)
+);
+
+CREATE TABLE IF NOT EXISTS industry_dim
+(
+    industry_id character varying(50)NOT NULL,
+    industry_name character varying(50),
+    CONSTRAINT industry_dim_pkey PRIMARY KEY (industry_id)
+);
+
+CREATE TABLE IF NOT EXISTS type_dim
+(
+    type_id integer NOT NULL,
+    type_name character varying(25),
+    CONSTRAINT type_dim_pkey PRIMARY KEY (type_id)
+);
+
+
+CREATE TABLE IF NOT EXISTS contracts_fact
+(
+    f_date date NOT NULL,
+    account_id character varying(25),
+    industry_id character varying(25) ,
+    type_id integer,
+    arr double precision,
+    value double precision,
+    no_of_license integer,
+    CONSTRAINT contracts_fact_pkey PRIMARY KEY (f_date),
+    CONSTRAINT account_id_fk FOREIGN KEY (account_id)
+        REFERENCES public.account_dim (account_id),
+    CONSTRAINT f_date_fk FOREIGN KEY (f_date)
+        REFERENCES public.date_dim (date_col) ,
+    CONSTRAINT industry_id_fk FOREIGN KEY (industry_id)
+        REFERENCES public.industry_dim (industry_id),
+    CONSTRAINT type_id_fk FOREIGN KEY (type_id)
+        REFERENCES public.type_dim (type_id)
+);
 ```
 
 Inserting data into the date dimension table
