@@ -1,3 +1,3 @@
-# LandTech--Suresh-Regmi
+# Readme File
 
-Each of the files in this repository contains the answer to the questions provided as a part of the technical task.
+This is just a readme files
