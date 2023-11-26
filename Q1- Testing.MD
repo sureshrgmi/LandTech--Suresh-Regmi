@@ -1,5 +1,3 @@
-# LandTech--Suresh-Regmi
-
 # Q1 Testing
 
 **Understanding of the problem**
